@@ -17,7 +17,7 @@ describe('advpng()', function () {
     var binPath = require('../lib/advpng').path;
 
     execFile(binPath, ['-h'], function (err, stdout, stderr) {
-      assert(stderr.toString().indexOf('advpng') !== -1);
+      assert(stdout.toString().indexOf('advpng') !== -1);
       callback();
     });
   });
@@ -26,25 +26,26 @@ describe('advpng()', function () {
     var binPath = path.join(__dirname, '../bin/advpng.js');
 
     execFile('node', [binPath, '-h'], function (err, stdout, stderr) {
-      assert(stderr.toString().indexOf('advpng') !== -1);
+      assert(stdout.toString().indexOf('advpng') !== -1);
       callback();
     });
   });
 
   it('should minify a .png', function (callback) {
     var binPath = path.join(__dirname, '../bin/advpng.js');
-    var args = [
-      '--recompress',
-      '--shrink-extra',
-      path.join(__dirname, 'fixtures', 'test.pcd ..ng'),
-      path.join(__dirname, 'fixtures', 'minified.png')
-    ];
+    var src = path.join(__dirname, 'fixtures', 'test.png');
+    var dest = path.join(__dirname, 'fixtures', 'minified.png');
+    var args = ['--recompress', '--shrink-extra', dest];
 
-    exec('node ' + [binPath].concat(args).join(' '), function () {
-      var actual = fs.statSync('test/fixtures/minified.png').size;
-      var original = fs.statSync('test/fixtures/test.png').size;
-      assert(actual < original);
-      callback();
+    exec('cp ' + src + ' ' + dest, function () {
+      exec('node ' + [binPath].concat(args).join(' '), function () {
+        var actual = fs.statSync('test/fixtures/minified.png').size;
+        var original = fs.statSync('test/fixtures/test.png').size;
+        console.log(actual);
+        console.log(original)
+        assert(actual < original);
+        callback();
+      });
     });
   });
 });
