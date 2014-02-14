@@ -41,8 +41,6 @@ describe('advpng()', function () {
       exec('node ' + [binPath].concat(args).join(' '), function () {
         var actual = fs.statSync('test/fixtures/minified.png').size;
         var original = fs.statSync('test/fixtures/test.png').size;
-        console.log(actual);
-        console.log(original)
         assert(actual < original);
         callback();
       });
