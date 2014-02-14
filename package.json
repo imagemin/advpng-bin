@@ -1,0 +1,41 @@
+{
+  "name": "advpng-bin",
+  "version": "0.0.1",
+  "description": "Pngcrush wrapper that makes it seamlessly available as a local dependency on OS X, Linux",
+  "keywords": [
+    "png",
+    "compress",
+    "minify",
+    "optimize",
+    "img",
+    "image"
+  ],
+  "author": "1000ch",
+  "main": "lib/advpng",
+  "bin": {
+    "advpng": "bin/advpng.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/1000ch/node-advpng-bin.git"
+  },
+  "scripts": {
+    "test": "mocha ./test/test-build.js ./test/test-path.js",
+    "postinstall": "node ./lib/build.js"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "license": "BSD",
+  "dependencies": {
+    "bin-wrapper": "~0.1.9",
+    "chalk": "~0.4.0"
+  },
+  "devDependencies": {
+    "mocha": "~1.17.1"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ]
+}
