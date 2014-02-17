@@ -33,5 +33,5 @@ execFile(advpngPath, ['--recompress', '--shrink-extra', 'dest.png'], function() 
 
 ## License
 
-This is MIT.
+This is licensed under BSD.
 [advpng](http://advancemame.sourceforge.net/doc-advpng.html) is licensed under GNU General Public License (GPL).
