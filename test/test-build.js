@@ -12,7 +12,7 @@ describe('advpng.build()', function () {
     var bin = new Bin(options);
 
     bin.path = path.join(__dirname, '../vendor', bin.bin);
-    bin.buildScript = './configure && make && mv ./advpng ' + path.join(__dirname, '../vendor');
+    bin.buildScript = './configure && make && mv ./advpng ' + path.join(__dirname, '../vendor/advpng');
 
     bin.build(function () {
       var origCTime = fs.statSync(bin.path).ctime;
