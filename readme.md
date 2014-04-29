@@ -1,7 +1,5 @@
 # [node-advpng-bin](https://npmjs.org/package/advpng-bin)
 
-## About
-
 [advpng](http://advancemame.sourceforge.net/doc-advpng.html) node.js wrapper that optimize PNG images.
 
 > The main purpose of this utility is to recompress png files to get the smallest possible size.
@@ -15,16 +13,22 @@
 ## Install
 
 ```sh
-$ npm install -g advpng-bin
+$ npm install --save advpng-bin
 ```
 
-## Usage with Node.js
+## Usage
 
 ```js
 var execFile = require('child_process').execFile;
-var advpngPath = require('advpng-bin').path;
+var advpng = require('advpng-bin').path;
 
-execFile(advpngPath, ['--recompress', '--shrink-extra', 'dest.png'], function() {
+fs.writeFileSync('output.png', fs.readFileSync('input.png'));
+
+execFile(advpng, ['--recompress', '--shrink-extra', 'output.png'], function (err) {
+  if (err) {
+    throw err;
+  }
+  
   console.log('Image minified');
 });
 ```
@@ -32,4 +36,5 @@ execFile(advpngPath, ['--recompress', '--shrink-extra', 'dest.png'], function() 
 ## License
 
 This is licensed under BSD.
+
 [advpng](http://advancemame.sourceforge.net/doc-advpng.html) is licensed under GNU General Public License (GPL).
