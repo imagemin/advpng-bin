@@ -1,47 +1,46 @@
 {
   "name": "advpng-bin",
   "version": "0.1.6",
-  "description": "advpng wrapper that makes it seamlessly available as a local dependency on OS X, Linux",
-  "keywords": [
-    "png",
-    "compress",
-    "minify",
-    "optimize",
-    "img",
-    "image"
-  ],
+  "description": "advpng wrapper that makes it seamlessly available as a local dependency",
+  "license": "MIT",
+  "repository": "imagemin/advpng-bin",
   "author": {
     "name": "1000ch",
     "email": "shogo.sensui@gmail.com",
     "web": "http://github.com/1000ch"
   },
-  "bin": {
-    "advpng": "cli.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/1000ch/node-advpng-bin.git"
-  },
-  "scripts": {
-    "test": "mocha --reporter spec --timeout 0",
-    "postinstall": "node index.js"
-  },
   "engines": {
     "node": ">=0.10.0"
   },
-  "license": "BSD",
-  "dependencies": {
-    "bin-build": "^0.1.1",
-    "bin-wrapper": "^0.3.4",
-    "chalk": "^0.5.1"
+  "bin": {
+    "advpng": "cli.js"
   },
-  "devDependencies": {
-    "bin-check": "^0.1.0",
-    "mocha": "^1.18.2",
-    "rimraf": "^2.2.6"
+  "scripts": {
+    "postinstall": "node lib/install.js",
+    "test": "mocha --reporter spec --timeout 0"
   },
   "files": [
     "cli.js",
-    "index.js"
-  ]
+    "index.js",
+    "lib"
+  ],
+  "keywords": [
+    "compress",
+    "image",
+    "img",
+    "minify",
+    "optimize",
+    "png"
+  ],
+  "dependencies": {
+    "bin-build": "^1.0.0",
+    "bin-wrapper": "^1.0.0",
+    "log-symbols": "^1.0.0"
+  },
+  "devDependencies": {
+    "bin-check": "^1.0.0",
+    "mkdirp": "^0.5.0",
+    "mocha": "^1.18.2",
+    "rimraf": "^2.2.8"
+  }
 }
