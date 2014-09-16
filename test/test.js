@@ -16,7 +16,7 @@ test('rebuild the advpng binaries', function (t) {
 	var version = require('../').version;
 	var builder = new BinBuild()
 		.src('http://prdownloads.sourceforge.net/advancemame/advancecomp-' + version + '.tar.gz')
-		.cmd('./configure --prefix="' + tmp + '" --bindir="' + tmp + '"')
+		.cmd('autoreconf -fiv && ./configure --prefix="' + tmp + '" --bindir="' + tmp + '"')
 		.cmd('make install');
 
 	builder.build(function (err) {
@@ -42,7 +42,7 @@ test('return path to binary and verify that it is working', function (t) {
 });
 
 test('minify a PNG', function (t) {
-	t.plan(8);
+	t.plan(7);
 
 	var args = [
 		'--recompress',
