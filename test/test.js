@@ -1,62 +1,77 @@
-/*global afterEach, beforeEach, describe, it */
 'use strict';
 
-var assert = require('assert');
 var binCheck = require('bin-check');
 var BinBuild = require('bin-build');
 var execFile = require('child_process').execFile;
 var fs = require('fs');
+var mkdir = require('mkdirp');
 var path = require('path');
 var rm = require('rimraf');
+var test = require('ava');
+var tmp = path.join(__dirname, 'tmp');
 
-describe('advpng()', function () {
-	afterEach(function (cb) {
-		rm(path.join(__dirname, 'tmp'), cb);
-	});
+test('rebuild the advpng binaries', function (t) {
+	t.plan(3);
 
-	beforeEach(function () {
-		fs.mkdirSync(path.join(__dirname, 'tmp'));
-	});
+	var version = require('../').version;
+	var builder = new BinBuild()
+		.src('http://prdownloads.sourceforge.net/advancemame/advancecomp-' + version + '.tar.gz')
+		.cmd('./configure --prefix="' + tmp + '" --bindir="' + tmp + '"')
+		.cmd('make install');
 
-	it('should rebuild the advpng binaries', function (cb) {
-		var tmp = path.join(__dirname, 'tmp');
-		var builder = new BinBuild()
-			.src('http://prdownloads.sourceforge.net/advancemame/advancecomp-1.19.tar.gz')
-			.cfg('./configure --prefix="' + tmp + '" --bindir="' + tmp + '"')
-			.make('make install');
+	builder.build(function (err) {
+		t.assert(!err);
 
-		builder.build(function (err) {
-			assert(!err);
-			assert(fs.existsSync(path.join(tmp, 'advpng')));
-			cb();
+		fs.exists(path.join(tmp, 'advpng'), function (exists) {
+			t.assert(exists);
+
+			rm(tmp, function (err) {
+				t.assert(!err);
+			});
 		});
 	});
+});
 
-	it('should return path to binary and verify that it is working', function (cb) {
-		var binPath = require('../').path;
+test('return path to binary and verify that it is working', function (t) {
+	t.plan(2);
 
-		binCheck(binPath, ['--version'], function (err, works) {
-			cb(assert.equal(works, true));
-		});
+	binCheck(require('../').path, ['--version'], function (err, works) {
+		t.assert(!err);
+		t.assert(works);
 	});
+});
 
-	it('should minify a PNG', function (cb) {
-		var src = path.join(__dirname, 'fixtures/test.png');
-		var dest = path.join(__dirname, 'tmp/test.png');
-		var binPath = require('../').path;
-		var args = [
-			'--recompress',
-			'--shrink-extra',
-			path.join(__dirname, 'tmp/test.png')
-		];
+test('minify a PNG', function (t) {
+	t.plan(8);
 
-		fs.writeFileSync(dest, fs.readFileSync(src));
+	var args = [
+		'--recompress',
+		'--shrink-extra',
+		path.join(tmp, 'test.png')
+	];
 
-		execFile(binPath, args, function () {
-			var src = fs.statSync(path.join(__dirname, 'fixtures/test.png')).size;
-			var dest = fs.statSync(path.join(__dirname, 'tmp/test.png')).size;
+	mkdir(tmp, function (err) {
+		t.assert(!err);
 
-			cb(assert(dest < src));
+		fs.readFile(path.join(__dirname, 'fixtures/test.png'), function (err, a) {
+			t.assert(!err);
+
+			fs.writeFile(path.join(tmp, 'test.png'), a, function (err) {
+				t.assert(!err);
+
+				execFile(require('../').path, args, function (err) {
+					t.assert(!err);
+
+					fs.stat(path.join(tmp, 'test.png'), function (err, b) {
+						t.assert(!err);
+						t.assert(b.size < a.length);
+
+						rm(tmp, function (err) {
+							t.assert(!err);
+						});
+					});
+				});
+			});
 		});
 	});
 });
