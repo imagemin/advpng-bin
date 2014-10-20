@@ -19,7 +19,7 @@ test('rebuild the advpng binaries', function (t) {
 		.cmd('./configure --prefix="' + tmp + '" --bindir="' + tmp + '"')
 		.cmd('make install');
 
-	builder.build(function (err) {
+	builder.run(function (err) {
 		t.assert(!err, err);
 
 		fs.exists(path.join(tmp, 'advpng'), function (exists) {
