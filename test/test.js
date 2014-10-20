@@ -4,14 +4,12 @@ var binCheck = require('bin-check');
 var BinBuild = require('bin-build');
 var execFile = require('child_process').execFile;
 var fs = require('fs');
-var mkdir = require('mkdirp');
 var path = require('path');
-var rm = require('rimraf');
 var test = require('ava');
 var tmp = path.join(__dirname, 'tmp');
 
 test('rebuild the advpng binaries', function (t) {
-	t.plan(3);
+	t.plan(2);
 
 	var version = require('../').version;
 	var builder = new BinBuild()
@@ -24,10 +22,6 @@ test('rebuild the advpng binaries', function (t) {
 
 		fs.exists(path.join(tmp, 'advpng'), function (exists) {
 			t.assert(exists);
-
-			rm(tmp, function (err) {
-				t.assert(!err);
-			});
 		});
 	});
 });
@@ -50,26 +44,18 @@ test('minify a PNG', function (t) {
 		path.join(tmp, 'test.png')
 	];
 
-	mkdir(tmp, function (err) {
+	fs.readFile(path.join(__dirname, 'fixtures/test.png'), function (err, a) {
 		t.assert(!err);
 
-		fs.readFile(path.join(__dirname, 'fixtures/test.png'), function (err, a) {
+		fs.writeFile(path.join(tmp, 'test.png'), a, function (err) {
 			t.assert(!err);
 
-			fs.writeFile(path.join(tmp, 'test.png'), a, function (err) {
+			execFile(require('../').path, args, function (err) {
 				t.assert(!err);
 
-				execFile(require('../').path, args, function (err) {
+				fs.stat(path.join(tmp, 'test.png'), function (err, b) {
 					t.assert(!err);
-
-					fs.stat(path.join(tmp, 'test.png'), function (err, b) {
-						t.assert(!err);
-						t.assert(b.size < a.length);
-
-						rm(tmp, function (err) {
-							t.assert(!err);
-						});
-					});
+					t.assert(b.size < a.length);
 				});
 			});
 		});
