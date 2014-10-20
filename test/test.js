@@ -19,7 +19,7 @@ test('rebuild the advpng binaries', function (t) {
 		.cmd('make install');
 
 	builder.build(function (err) {
-		t.assert(!err);
+		t.assert(!err, err);
 
 		fs.exists(path.join(tmp, 'advpng'), function (exists) {
 			t.assert(exists);
@@ -31,7 +31,7 @@ test('return path to binary and verify that it is working', function (t) {
 	t.plan(2);
 
 	binCheck(require('../').path, ['--version'], function (err, works) {
-		t.assert(!err);
+		t.assert(!err, err);
 		t.assert(works);
 	});
 });
@@ -48,16 +48,16 @@ test('minify a PNG', function (t) {
 	];
 
 	fs.readFile(src, function (err, data) {
-		t.assert(!err);
+		t.assert(!err, err);
 
 		fs.writeFile(dest, data, function (err) {
-			t.assert(!err);
+			t.assert(!err, err);
 
 			execFile(require('../').path, args, function (err) {
-				t.assert(!err);
+				t.assert(!err, err);
 
 				compareSize(src, dest, function (err, res) {
-					t.assert(!err);
+					t.assert(!err, err);
 					t.assert(res[dest] < res[src]);
 				});
 			});
