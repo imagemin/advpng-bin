@@ -15,7 +15,8 @@ test('rebuild the advpng binaries', function (t) {
 	var version = require('../').version;
 	var builder = new BinBuild()
 		.src('http://prdownloads.sourceforge.net/advancemame/advancecomp-' + version + '.tar.gz')
-		.cmd('autoreconf -fiv && ./configure --prefix="' + tmp + '" --bindir="' + tmp + '"')
+		.cmd('autoreconf -fiv')
+		.cmd('./configure --prefix="' + tmp + '" --bindir="' + tmp + '"')
 		.cmd('make install');
 
 	builder.build(function (err) {
