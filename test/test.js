@@ -1,30 +1,26 @@
 'use strict';
 
-var binCheck = require('bin-check');
-var BinBuild = require('bin-build');
-var compareSize = require('compare-size');
 var execFile = require('child_process').execFile;
 var fs = require('fs');
 var path = require('path');
+var binCheck = require('bin-check');
+var BinBuild = require('bin-build');
+var compareSize = require('compare-size');
 var test = require('ava');
 var tmp = path.join(__dirname, 'tmp');
 
 test('rebuild the advpng binaries', function (t) {
 	t.plan(2);
 
-	var version = require('../').version;
 	var builder = new BinBuild()
-		.src('http://prdownloads.sourceforge.net/advancemame/advancecomp-' + version + '.tar.gz')
+		.src('http://prdownloads.sourceforge.net/advancemame/advancecomp-1.19.tar.gz')
 		.cmd('autoreconf -fiv')
 		.cmd('./configure --prefix="' + tmp + '" --bindir="' + tmp + '"')
 		.cmd('make install');
 
 	builder.run(function (err) {
 		t.assert(!err, err);
-
-		fs.exists(path.join(tmp, 'advpng'), function (exists) {
-			t.assert(exists);
-		});
+		t.assert(fs.statSync(path.join(tmp, 'advpng')).isFile());
 	});
 });
 

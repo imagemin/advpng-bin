@@ -6,7 +6,7 @@ possible size
 
 ## Install
 
-```sh
+```
 $ npm install --save advpng-bin
 ```
 
@@ -14,14 +14,10 @@ $ npm install --save advpng-bin
 ## Usage
 
 ```js
-var advpng = require('advpng-bin').path;
 var execFile = require('child_process').execFile;
+var advpng = require('advpng-bin').path;
 
 execFile(advpng, ['--recompress', '--shrink-extra', 'image.png'], function (err) {
-	if (err) {
-		throw err;
-	}
-
 	console.log('Image minified!');
 });
 ```
@@ -29,11 +25,11 @@ execFile(advpng, ['--recompress', '--shrink-extra', 'image.png'], function (err)
 
 ## CLI
 
-```sh
+```
 $ npm install --global advpng-bin
 ```
 
-```sh
+```
 $ advpng --help
 ```
 
