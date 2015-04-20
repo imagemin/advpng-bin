@@ -15,7 +15,7 @@ $ npm install --save advpng-bin
 
 ```js
 var execFile = require('child_process').execFile;
-var advpng = require('advpng-bin').path;
+var advpng = require('advpng-bin');
 
 execFile(advpng, ['--recompress', '--shrink-extra', 'image.png'], function (err) {
 	console.log('Image minified!');
