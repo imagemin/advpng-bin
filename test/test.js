@@ -1,65 +1,47 @@
-/*global afterEach,beforeEach,it*/
 'use strict';
+const fs = require('fs');
+const path = require('path');
+const test = require('ava');
+const execa = require('execa');
+const tempy = require('tempy');
+const binCheck = require('bin-check');
+const BinBuild = require('bin-build');
+const compareSize = require('compare-size');
+const advpng = require('..');
 
-var assert = require('assert');
-var execFile = require('child_process').execFile;
-var fs = require('fs');
-var path = require('path');
-var binCheck = require('bin-check');
-var BinBuild = require('bin-build');
-var compareSize = require('compare-size');
-var mkdirp = require('mkdirp');
-var rimraf = require('rimraf');
-var tmp = path.join(__dirname, 'tmp');
-
-beforeEach(function () {
-	mkdirp.sync(tmp);
-});
-
-afterEach(function () {
-	rimraf.sync(tmp);
-});
-
-it('rebuild the advpng binaries', function (cb) {
-	var builder = new BinBuild()
+test.cb('rebuild the advpng binaries', t => {
+	const tmp = tempy.directory();
+	const builder = new BinBuild()
 		.src('http://prdownloads.sourceforge.net/advancemame/advancecomp-1.19.tar.gz')
 		.cmd('autoreconf -fiv')
-		.cmd('./configure --prefix="' + tmp + '" --bindir="' + tmp + '"')
+		.cmd(`./configure --prefix="${tmp}" --bindir="${tmp}"`)
 		.cmd('make install');
 
-	builder.run(function (err) {
-		assert(!err);
-		assert(fs.statSync(path.join(tmp, 'advpng')).isFile());
-		cb();
+	builder.run(err => {
+		t.ifError(err);
+		t.true(fs.existsSync(path.join(tmp, 'advpng')));
+		t.end();
 	});
 });
 
-it('return path to binary and verify that it is working', function (cb) {
-	binCheck(require('../'), ['--version'], function (err, works) {
-		assert(!err);
-		assert(works);
-		cb();
-	});
+test('return path to binary and verify that it is working', async t => {
+	t.true(await binCheck(advpng, ['--version']));
 });
 
-it('minify a PNG', function (cb) {
-	var src = path.join(__dirname, 'fixtures/test.png');
-	var contents = fs.readFileSync(src);
-	var dest = path.join(tmp, 'test.png');
-	var args = [
+test('minify a PNG', async t => {
+	const tmp = tempy.directory();
+	const src = path.join(__dirname, 'fixtures/test.png');
+	const contents = fs.readFileSync(src);
+	const dest = path.join(tmp, 'test.png');
+	const args = [
 		'--recompress',
 		'--shrink-extra',
 		dest
 	];
 
 	fs.writeFileSync(dest, contents);
-	execFile(require('../'), args, function (err) {
-		assert(!err);
+	await execa(advpng, args);
+	const res = await compareSize(src, dest);
 
-		compareSize(src, dest, function (err, res) {
-			assert(!err);
-			assert(res[dest] < res[src]);
-			cb();
-		});
-	});
+	t.true(res[dest] < res[src]);
 });
