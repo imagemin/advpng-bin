@@ -5,22 +5,20 @@ const test = require('ava');
 const execa = require('execa');
 const tempy = require('tempy');
 const binCheck = require('bin-check');
-const BinBuild = require('bin-build');
+const binBuild = require('bin-build');
 const compareSize = require('compare-size');
 const advpng = require('..');
 
-test.cb('rebuild the advpng binaries', t => {
+test('rebuild the advpng binaries', async t => {
 	const tmp = tempy.directory();
-	const builder = new BinBuild()
-		.src('http://prdownloads.sourceforge.net/advancemame/advancecomp-1.19.tar.gz')
-		.cmd('autoreconf -fiv')
-		.cmd(`./configure --prefix="${tmp}" --bindir="${tmp}"`)
-		.cmd('make install');
-
-	builder.run(err => {
-		t.ifError(err);
+	await binBuild.url('http://prdownloads.sourceforge.net/advancemame/advancecomp-1.19.tar.gz', [
+		'autoreconf -fiv',
+		`./configure --prefix="${tmp}" --bindir="${tmp}"`,
+		'make install'
+	]).then(() => {
 		t.true(fs.existsSync(path.join(tmp, 'advpng')));
-		t.end();
+	}).catch(() => {
+		t.fail();
 	});
 });
 
