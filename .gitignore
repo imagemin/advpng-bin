@@ -1,3 +1,4 @@
 node_modules
 test/tmp
-vendor/advpng*
+vendor/adv*
+vendor/share
