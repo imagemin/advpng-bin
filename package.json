@@ -29,7 +29,7 @@
     "advpng": "cli.js"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=8"
   },
   "scripts": {
     "postinstall": "node lib/install.js",
@@ -51,16 +51,16 @@
     "advpng"
   ],
   "dependencies": {
-    "bin-build": "^2.2.0",
-    "bin-wrapper": "^3.0.0",
-    "logalot": "^2.0.0"
+    "bin-build": "^3.0.0",
+    "bin-wrapper": "^4.1.0",
+    "logalot": "^2.1.0"
   },
   "devDependencies": {
     "ava": "*",
-    "bin-check": "^4.0.1",
+    "bin-check": "^4.1.0",
     "compare-size": "^3.0.0",
-    "execa": "^0.6.3",
-    "tempy": "^0.1.0",
+    "execa": "^2.0.3",
+    "tempy": "^0.3.0",
     "xo": "*"
   }
 }
