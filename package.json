@@ -1,6 +1,6 @@
 {
   "name": "advpng-bin",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "AdvPNG bin-wrapper that makes it seamlessly available as a local dependency",
   "license": "MIT",
   "repository": "imagemin/advpng-bin",
