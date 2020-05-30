@@ -10,13 +10,13 @@ const compareSize = require('compare-size');
 const advpng = require('..');
 
 test('rebuild the advpng binaries', async t => {
-	const tmp = tempy.directory();
+	const temporary = tempy.directory();
 	await binBuild.url('https://github.com/amadvance/advancecomp/releases/download/v2.1/advancecomp-2.1.tar.gz', [
 		'autoreconf -fiv',
-		`./configure --prefix="${tmp}" --bindir="${tmp}"`,
+		`./configure --prefix="${temporary}" --bindir="${temporary}"`,
 		'make install'
 	]).then(() => {
-		t.true(fs.existsSync(path.join(tmp, 'advpng')));
+		t.true(fs.existsSync(path.join(temporary, 'advpng')));
 	}).catch(() => {
 		t.fail();
 	});
@@ -27,10 +27,10 @@ test('return path to binary and verify that it is working', async t => {
 });
 
 test('minify a PNG', async t => {
-	const tmp = tempy.directory();
+	const temporary = tempy.directory();
 	const src = path.join(__dirname, 'fixtures/test.png');
 	const contents = fs.readFileSync(src);
-	const dest = path.join(tmp, 'test.png');
+	const dest = path.join(temporary, 'test.png');
 	const args = [
 		'--recompress',
 		'--shrink-extra',
@@ -39,7 +39,7 @@ test('minify a PNG', async t => {
 
 	fs.writeFileSync(dest, contents);
 	await execa(advpng, args);
-	const res = await compareSize(src, dest);
+	const result = await compareSize(src, dest);
 
-	t.true(res[dest] < res[src]);
+	t.true(result[dest] < result[src]);
 });
