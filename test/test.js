@@ -11,7 +11,7 @@ const advpng = require('..');
 
 test('rebuild the advpng binaries', async t => {
 	const temporary = tempy.directory();
-	await binBuild.url('https://github.com/amadvance/advancecomp/releases/download/v2.1/advancecomp-2.1.tar.gz', [
+	await binBuild.file(path.resolve(__dirname, '../vendor/source/advancecomp-2.1.tar.gz'), [
 		'autoreconf -fiv',
 		`./configure --prefix="${temporary}" --bindir="${temporary}"`,
 		'make install'
