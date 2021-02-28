@@ -1,4 +1,4 @@
-# advpng-bin [![Build Status](http://img.shields.io/travis/imagemin/advpng-bin.svg?style=flat)](https://travis-ci.org/imagemin/advpng-bin)
+# advpng-bin ![GitHub Actions Status](https://github.com/imagemin/advpng-bin/workflows/test/badge.svg?branch=master)
 
 > The main purpose of this utility is to recompress png files to get the smallest possible size
 
