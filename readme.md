@@ -1,4 +1,4 @@
-# advpng-bin
+# advpng-bin ![GitHub Actions Status](https://github.com/imagemin/advpng-bin/workflows/test/badge.svg?branch=main)
 
 > The main purpose of this utility is to recompress png files to get the smallest possible size
 
@@ -13,10 +13,10 @@ $ npm install --save advpng-bin
 ## Usage
 
 ```js
-const {execFile} = require('child_process');
-const advpng = require('advpng-bin');
+import {execFile} from 'node:child_process';
+import advpng from 'advpng-bin';
 
-execFile(advpng, ['--recompress', '--shrink-extra', 'image.png'], err => {
+execFile(advpng, ['--recompress', '--shrink-extra', 'image.png'], error => {
 	console.log('Image minified!');
 });
 ```
